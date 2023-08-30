@@ -12,7 +12,6 @@ import HomeScreen from './HomeScreen';
 import AboutScreen from './AboutScreen';
 import ContactScreen from './ContactScreen';
 import ReservationScreen from './ReservationScreen';
-import FavoritesScreen from './FavoritesScreen';
 import { Icon } from 'react-native-elements';
 import logo from '../assets/images/logo.png';
 import { useDispatch } from 'react-redux';
@@ -21,7 +20,9 @@ import { fetchPartners } from '../features/partners/partnersSlice';
 import { fetchCampsites } from '../features/campsites/campsitesSlice';
 import { fetchPromotions } from '../features/promotions/promotionsSlice';
 import { fetchComments } from '../features/comments/commentsSlice';
+import FavoritesScreen from './FavoritesScreen';
 import LoginScreen from './LoginScreen';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/core';
 
 const Drawer = createDrawerNavigator();
 
@@ -144,6 +145,34 @@ const FavoritesNavigator = () => {
     );
 };
 
+const LoginNavigator = () => {
+    const Stack = createStackNavigator();
+    return (
+        <Stack.Navigator screenOptions={screenOptions}>
+            <Stack.Screen
+                name='Login'
+                component={LoginScreen}
+                options={({ navigation, route }) => ({
+                    headerTitle: getFocusedRouteNameFromRoute(route),
+                    headerLeft: () => (
+                        <Icon
+                            name={
+                                getFocusedRouteNameFromRoute(route) ===
+                                'Register'
+                                    ? 'user-plus'
+                                    : 'sign-in'
+                            }
+                            type='font-awesome'
+                            iconStyle={styles.stackIcon}
+                            onPress={() => navigation.toggleDrawer()}
+                        />
+                    )
+                })}
+            />
+        </Stack.Navigator>
+    );
+};
+
 const DirectoryNavigator = () => {
     const Stack = createStackNavigator();
     return (
@@ -171,28 +200,6 @@ const DirectoryNavigator = () => {
                 component={CampsiteInfoScreen}
                 options={({ route }) => ({
                     title: route.params.campsite.name
-                })}
-            />
-        </Stack.Navigator>
-    );
-};
-
-const LoginNavigator = () => {
-    const Stack = createStackNavigator();
-    return (
-        <Stack.Navigator screenOptions={screenOptions}>
-            <Stack.Screen
-                name='Login'
-                component={LoginScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <Icon
-                            name='sign-in'
-                            type='font-awesome'
-                            iconStyle={styles.stackIcon}
-                            onPress={() => navigation.toggleDrawer()}
-                        />
-                    )
                 })}
             />
         </Stack.Navigator>
